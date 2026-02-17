@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic List Item</title>
+    <style>
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            text-align: center;
+            background-color: #f4f6f9;
+            padding-top: 50px;
+        }
+        .container{
+            width: 400px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        ul{
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+        li{
+            background-color: #3498db;
+            color: white;
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 5px;
+        }
+
+        button{
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #2c3e50;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover{
+            background-color: #1abc9c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Dynamic List</h2>
+        <button id="addItemBtn">Add List Item</button>
+        <ul id="myList">
+            <li>Item 1</li>
+        </ul>
+    </div>
+    <script>
+        // step 1: select elements
+        const button = document.getElementById('addItemBtn')
+        const list = document.getElementById('myList')
+
+        let count =2  // to keep track of item number
+
+        // step 2: create new li element 
+        button.addEventListener('click', function(){
+            // step 3: create new li element
+            const newItem = document.createElement('li')
+
+            // step 4: add text inside li
+            newItem.textContent="Item "+count
+
+            // step 5: append li to ul
+            list.appendChild(newItem)
+            count++
+        })
+        
+    </script>
+</body>
+</html>
