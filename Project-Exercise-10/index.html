@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavScript Form Validation</title>
+    <style>
+        body{
+        font-family: Arial, Helvetica, sans-serif;
+        background-color: #f4f6f9;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        }
+
+        .form-container{
+            background: white;
+            padding: 30px;
+            width: 350px;
+            border-radius: 8px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        h2{
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        input{
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+        .error{
+            color:red;
+            font-size: 13px;
+            margin-bottom: 10px;
+            display: block;
+        }
+        button{
+            width: 100%;
+            padding:10px;
+            background-color:#3498db;
+            color:white;
+            border:none;
+            cursor:pointer;
+            margin-top: 10px;
+        }
+        button:hover{
+            background-color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Register</h2>
+        <form id="myForm">
+            <label for="">Name</label>
+            <input type="text" id="name">
+            <span class="error" id="nameError"></span>
+
+            <label for="">Email</label>
+            <input type="text" id="email">
+            <span class="error" id="emailError"></span>
+
+            <label>Password</label>
+            <input type="password" id="password">
+            <span class="error" id="passwordError"></span>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        const form = document.getElementById("myForm")
+
+        form.addEventListener("submit", function(event){
+            event.preventDefault()
+
+            // get input value
+            const name = document.getElementById("name").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value.trim();
+
+            // Error elements
+            const nameError = document.getElementById("nameError");
+            const emailError = document.getElementById("emailError");
+            const passwordError = document.getElementById("passwordError");
+
+            // Clear previous errors
+            nameError.textContent = "";
+            emailError.textContent = "";
+            passwordError.textContent = "";
+
+            let isValid = true;
+
+            // Name validation
+            if (name === "") {
+                nameError.textContent = "Name is required";
+                isValid = false;
+            }
+
+            // Email validation (Regex)
+            const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+
+            if (email === "") {
+                emailError.textContent = "Email is required";
+                isValid = false;
+            } 
+            else if (!email.match(emailPattern)) {
+                emailError.textContent = "Enter a valid email";
+                isValid = false;
+            }
+
+            // Password validation
+            if (password.length < 6) {
+                passwordError.textContent = "Password must be at least 6 characters";
+                isValid = false;
+            }
+
+            // If valid
+            if (isValid) {
+                alert("Form submitted successfully!");
+                form.reset();
+            }
+        })
+    </script>
+</body>
+</html>
