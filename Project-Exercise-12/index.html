@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Button</title>
+    <style>
+        body{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #f4f6f9;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        .animated-btn{
+            padding:15px 30px;
+            font-size: 18px;
+            border:none;
+            border-radius: 8px;
+            background: #3498db;
+            color: white;
+            cursor:pointer;
+            transition: all 0.3s ease;
+        }
+        .animated-btn:hover{
+            transform: scale(1.1);
+            background: #2c3e50;
+        }
+
+        /* click effect */
+        .animated-btn:active{
+            transform: scale(0.95);
+        }
+
+        .pulse{
+            animation: pulseAnimation 0.4s ease;
+        }
+        @keyframes pulseAnimation{
+            0% {transform: scale(1);}
+            50% {transform: scale(1.15);}
+            100% {transform: scale(1);}
+        }
+    </style>
+</head>
+<body>
+    
+    <button class="animated-btn" id="myButton">Click Me</button>
+    <script>
+        const button = document.getElementById("myButton")
+
+        button.addEventListener("click", function(){
+            button.classList.add("pulse")
+
+            // remove class after animation completes
+            setTimeout(()=>{
+                button.classList.remove("pulse")
+            }, 400)
+        })
+    </script>
+</body>
+</html>
