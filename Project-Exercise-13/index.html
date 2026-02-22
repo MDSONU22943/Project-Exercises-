@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Object Example</title>
+    <style>
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f6f9;
+            padding: 40px;
+        }
+        h2{
+            margin-top: 0;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="card" id="carInfo">
+        <h2>Car Information</h2>
+    </div>
+
+    <script>
+        const car = {
+            make:"Toyota",
+            model:"Fortuner",
+            year:2023
+        }
+
+        console.log(car);
+        
+        // Accessing object properties
+        console.log("Make:", car.make);
+        console.log("Model:", car.model);
+        console.log("Year:", car.year);
+
+        // display object data on webpage 
+        const carDiv = document.getElementById("carInfo")
+
+        carDiv.innerHTML +=`
+        <p><strong>Make:</strong> ${car.make}</p>
+            <p><strong>Model:</strong> ${car.model}</p>
+            <p><strong>Year:</strong> ${car.year}</p>
+        `
+
+        // adding a method inside object
+        car.getCarInfo = function(){
+            return `${this.make} ${this.model} (${this.year})`
+        }
+        console.log("Full Info:", car.getCarInfo());
+        
+    </script>
+</body>
+</html>
