@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Quiz App</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f4f6f9;
+        display: flex;
+        justify-content: center;
+        padding-top: 60px;
+    }
+
+    .quiz-container {
+        background: white;
+        width: 400px;
+        padding: 25px;
+        border-radius: 8px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+        margin-bottom: 15px;
+    }
+
+    .option {
+        margin: 8px 0;
+    }
+
+    button {
+        margin-top: 15px;
+        padding: 8px 15px;
+        border: none;
+        background: #3498db;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #2c3e50;
+    }
+
+    .result {
+        margin-top: 15px;
+        font-weight: bold;
+    }
+</style>
+</head>
+<body>
+
+<div class="quiz-container">
+    <h2 id="question">Question Text</h2>
+
+    <div id="options"></div>
+
+    <button id="nextBtn">Next</button>
+
+    <div class="result" id="result"></div>
+</div>
+
+<script>
+
+const quizData = [
+    {
+        question: "Which language runs in the browser?",
+        options: ["Java", "C", "Python", "JavaScript"],
+        answer: "JavaScript"
+    },
+    {
+        question: "What does CSS stand for?",
+        options: ["Color Style Sheets", "Cascading Style Sheets", "Computer Style Sheets", "Creative Style System"],
+        answer: "Cascading Style Sheets"
+    },
+    {
+    question: "Which HTML tag is used for JavaScript?",
+    options: ["&lt;js&gt;", "&lt;script&gt;", "&lt;javascript&gt;", "&lt;code&gt;"],
+    answer: "&lt;script&gt;"
+}
+];
+
+let currentQuestion = 0;
+let score = 0;
+
+const questionEl = document.getElementById("question");
+const optionsEl = document.getElementById("options");
+const nextBtn = document.getElementById("nextBtn");
+const resultEl = document.getElementById("result");
+
+function loadQuestion() {
+
+    const currentQuiz = quizData[currentQuestion];
+    questionEl.textContent = currentQuiz.question;
+
+    optionsEl.innerHTML = "";
+
+    currentQuiz.options.forEach(option => {
+        const div = document.createElement("div");
+        div.classList.add("option");
+
+        div.innerHTML = `
+            <label>
+                <input type="radio" name="answer" value="${option}">
+                ${option}
+            </label>
+        `;
+
+        optionsEl.appendChild(div);
+    });
+}
+
+function getSelectedAnswer() {
+    const answers = document.querySelectorAll('input[name="answer"]');
+    let selected = null;
+
+    answers.forEach(answer => {
+        if (answer.checked) {
+            selected = answer.value;
+        }
+    });
+
+    return selected;
+}
+
+nextBtn.addEventListener("click", () => {
+
+    const selectedAnswer = getSelectedAnswer();
+
+    if (!selectedAnswer) {
+        alert("Please select an answer!");
+        return;
+    }
+
+    if (selectedAnswer === quizData[currentQuestion].answer) {
+        score++;
+    }
+
+    currentQuestion++;
+
+    if (currentQuestion < quizData.length) {
+        loadQuestion();
+    } else {
+        showResult();
+    }
+});
+
+function showResult() {
+    questionEl.textContent = "Quiz Completed!";
+    optionsEl.innerHTML = "";
+    nextBtn.style.display = "none";
+    resultEl.textContent = `Your Score: ${score} / ${quizData.length}`;
+}
+
+loadQuestion();
+
+</script>
+
+</body>
+</html>
