@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Countdown Timer</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.timer-container {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+#time {
+    font-size: 40px;
+    margin: 20px 0;
+    font-weight: bold;
+}
+
+button {
+    padding: 8px 15px;
+    margin: 5px;
+    border: none;
+    background: #3498db;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #2c3e50;
+}
+</style>
+</head>
+<body>
+
+<div class="timer-container">
+    <h2>Countdown Timer</h2>
+    <div id="time">10:00</div>
+
+    <button id="startBtn">Start</button>
+    <button id="resetBtn">Reset</button>
+</div>
+
+<script>
+
+let totalTime = 10 * 60; // 10 minutes in seconds
+let timerInterval;
+
+const timeDisplay = document.getElementById("time");
+const startBtn = document.getElementById("startBtn");
+const resetBtn = document.getElementById("resetBtn");
+
+// Format time (MM:SS)
+function formatTime(seconds) {
+    let minutes = Math.floor(seconds / 60);
+    let secs = seconds % 60;
+
+    if (secs < 10) {
+        secs = "0" + secs;
+    }
+
+    return `${minutes}:${secs}`;
+}
+
+// Update Timer
+function updateTimer() {
+    if (totalTime <= 0) {
+        clearInterval(timerInterval);
+        alert("Time is up!");
+        return;
+    }
+
+    totalTime--;
+    timeDisplay.textContent = formatTime(totalTime);
+}
+
+// Start Timer
+startBtn.addEventListener("click", () => {
+    if (!timerInterval) {
+        timerInterval = setInterval(updateTimer, 1000);
+    }
+});
+
+// Reset Timer
+resetBtn.addEventListener("click", () => {
+    clearInterval(timerInterval);
+    totalTime = 10 * 60;
+    timeDisplay.textContent = "10:00";
+    timerInterval = null;
+});
+
+</script>
+
+</body>
+</html>
