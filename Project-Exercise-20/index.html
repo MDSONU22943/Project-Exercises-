@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather App</title>
+    <style>
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        background: linear-gradient(to right, #4facfe, #00f2f3);
+        display: flex;
+        justify-content: center;
+        padding-top: 80px;
+        color: white;
+      }
+      .container {
+        background: rgba(0, 0, 0, 0.3);
+        padding: 25px;
+        border-radius: 10px;
+        width: 350px;
+        text-align: center;
+      }
+      input {
+        width: 70%;
+        padding: 8px;
+      }
+      button {
+        padding: 8px 10px;
+        cursor: pointer;
+      }
+      .weather-info {
+        margin-top: 20px;
+      }
+      .error {
+        margin-top: 20px;
+        color: #ff4c4c;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Weather App</h2>
+      <input type="text" id="cityInput" placeholder="Enter city name" />
+      <button id="searchBtn">Search</button>
+      <div class="weather-info" id="weatherInfo"></div>
+      <div class="error" id="errorMsg"></div>
+    </div>
+
+    <script>
+      const apiKey = "189866f111344de7a7f53345232603";
+      const searchBtn = document.getElementById("searchBtn");
+      const cityInput = document.getElementById("cityInput");
+      const weatherInfo = document.getElementById("weatherInfo");
+      const errorMsg = document.getElementById("errorMsg");
+
+      searchBtn.addEventListener("click", getWeather);
+
+      async function getWeather() {
+        const city = cityInput.value.trim();
+        if (city === "") {
+          errorMsg.textContent = "Please enter a city name.";
+          weatherInfo.innerHTML = "";
+          return;
+        }
+
+        try {
+          const response = await fetch(
+            `http://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}`,
+          );
+          if (!response.ok) {
+            throw new Error("City not found");
+          }
+          const data = await response.json();
+          displayWeather(data);
+        } catch (error) {
+          errorMsg.textContent = error.message;
+          weatherInfo.innerHTML = "";
+        }
+      }
+
+      function displayWeather(data) {
+        const location = data.location;
+        const current = data.current;
+
+        weatherInfo.innerHTML = `
+        <h3>${location.name}, ${location.region}</h3>
+        <p><strong>Country:</strong> ${location.country}</p>
+        <p><strong>Local Time:</strong> ${location.localtime}</p>
+
+        <img src="https:${current.condition.icon}" alt="weather icon">
+
+        <h2>${current.temp_c}°C</h2>
+        <p><strong>Condition:</strong> ${current.condition.text}</p>
+        <p><strong>Feels Like:</strong> ${current.feelslike_c}°C</p>
+        <p><strong>Humidity:</strong> ${current.humidity}%</p>
+        <p><strong>Wind:</strong> ${current.wind_kph} kph (${current.wind_dir})</p>
+        <p><strong>UV Index:</strong> ${current.uv}</p>
+    `;
+      }
+    </script>
+  </body>
+</html>
