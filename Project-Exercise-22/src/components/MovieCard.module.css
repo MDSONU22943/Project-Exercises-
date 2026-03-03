@@ -1,0 +1,15 @@
+.card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    max-width: 320px;
+    margin: 20px auto;
+    transition: all 0.3s ease;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 600px) {
+    .card {
+      max-width: 90%;
+    }
+  }
