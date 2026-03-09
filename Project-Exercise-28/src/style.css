@@ -1,0 +1,252 @@
+:root {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: light dark;
+  color: #1a1a1a;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+#app {
+  width: 100%;
+  max-width: 420px;
+}
+
+.app {
+  width: 100%;
+}
+
+.login-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.06);
+  padding: 2rem;
+}
+
+.login-card h1 {
+  margin: 0 0 0.25rem;
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #111;
+}
+
+.subtitle {
+  margin: 0 0 1.5rem;
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.field label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.field input {
+  padding: 0.625rem 0.875rem;
+  font-size: 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.field input:hover:not(:disabled) {
+  border-color: #9ca3af;
+}
+
+.field input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.field input::placeholder {
+  color: #9ca3af;
+}
+
+.field input:disabled {
+  background: #f3f4f6;
+  cursor: not-allowed;
+}
+
+.field input[aria-invalid="true"] {
+  border-color: #ef4444;
+}
+
+.field input[aria-invalid="true"]:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+}
+
+.error {
+  font-size: 0.8rem;
+  color: #dc2626;
+}
+
+.feedback {
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.feedback.loading {
+  background: #eff6ff;
+  color: #1d4ed8;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #93c5fd;
+  border-top-color: #1d4ed8;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.feedback.success {
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.feedback.error-feedback {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.submit-btn {
+  padding: 0.75rem 1.25rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #fff;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.1s;
+}
+
+.submit-btn:hover:not(:disabled) {
+  opacity: 0.95;
+}
+
+.submit-btn:active:not(:disabled) {
+  transform: scale(0.99);
+}
+
+.submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.hint {
+  margin: 1.25rem 0 0;
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+.hint code {
+  padding: 0.15em 0.4em;
+  background: #f1f5f9;
+  border-radius: 4px;
+  font-size: 0.85em;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color: #e5e7eb;
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  }
+
+  .login-card {
+    background: #1e293b;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+  }
+
+  .login-card h1 {
+    color: #f1f5f9;
+  }
+
+  .subtitle {
+    color: #94a3b8;
+  }
+
+  .field label {
+    color: #cbd5e1;
+  }
+
+  .field input {
+    background: #0f172a;
+    border-color: #334155;
+    color: #f1f5f9;
+  }
+
+  .field input:hover:not(:disabled) {
+    border-color: #475569;
+  }
+
+  .field input:disabled {
+    background: #1e293b;
+  }
+
+  .field input::placeholder {
+    color: #64748b;
+  }
+
+  .hint {
+    color: #64748b;
+  }
+
+  .hint code {
+    background: #334155;
+  }
+
+  .feedback.loading {
+    background: #1e3a5f;
+    color: #93c5fd;
+  }
+
+  .feedback.success {
+    background: #064e3b;
+    color: #6ee7b7;
+  }
+
+  .feedback.error-feedback {
+    background: #450a0a;
+    color: #fca5a5;
+  }
+}
