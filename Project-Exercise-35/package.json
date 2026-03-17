@@ -1,0 +1,17 @@
+{
+  "name": "project-exercise-35",
+  "version": "1.0.0",
+  "description": "- **Topic Covered:** Express.js Basics\r - **Description:** Build a simple blog backend using Express.js. Implement CRUD (Create, Read, Update, Delete) functionality with endpoints like `/add-post`, `/view-post/:id`, `/update-post/:id`, and `/delete-post/:id`. Use an in-memory array to store blog posts for simplicity.\r - **Skills Covered:**\r     - Setting up an Express server\r     - Creating and managing RESTful routes\r     - Handling HTTP methods (GET, POST, PUT, DELETE)\r     - Managing request parameters and body parsing",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "npx nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
