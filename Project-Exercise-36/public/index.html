@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevShelf - Your Code Library</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:ital,wght@0,300;0,400;0,600;1,300&display=swap"
+      rel="stylesheet"
+    />
+</head>
+<body>
+    <div class="noise"></div>
+
+    <header class="site-header">
+        <div class="header-inner">
+            <a href="/" class="logo"><span class="logo-bracket">{</span>
+          <span class="logo-text">DevShelf</span>
+          <span class="logo-bracket">}</span></a>
+
+          <nav class="nav" aria-label="Main navigation">
+          <a href="#features" class="nav-link">Features</a>
+          <a href="#stack" class="nav-link">Stack</a>
+          <a href="#contact" class="nav-link">Contact</a>
+          <a href="#" class="nav-cta">Get Started</a>
+        </nav>
+        <button class="hamburger" aria-label="Toggle menu" id="hamburger">
+          <span></span><span></span><span></span>
+        </button>
+        </div>
+    </header>
+
+     <main>
+      <section class="hero">
+        <div class="hero-tag">
+          <span class="dot"></span> Now serving static files with Express.js
+        </div>
+        <h1 class="hero-title">
+          Your personal<br /><em>code library,</em><br />beautifully organised.
+        </h1>
+        <p class="hero-sub">
+          Store, tag, and revisit code snippets the moment inspiration strikes.
+          Zero friction. Maximum clarity.
+        </p>
+        <div class="hero-actions">
+          <a href="#features" class="btn-primary">Explore features</a>
+          <a href="#stack" class="btn-ghost">View the stack</a>
+        </div>
+ 
+        <!-- Decorative grid card -->
+        <div class="hero-card" aria-hidden="true">
+          <div class="card-header">
+            <span class="card-dot red"></span>
+            <span class="card-dot yellow"></span>
+            <span class="card-dot green"></span>
+            <span class="card-filename">server.js</span>
+          </div>
+          <pre class="card-code"><span class="kw">const</span> express = <span class="fn">require</span>(<span class="str">'express'</span>);
+<span class="kw">const</span> app = <span class="fn">express</span>();
+ 
+app.<span class="fn">use</span>(express.<span class="fn">static</span>(<span class="str">'public'</span>));
+ 
+app.<span class="fn">listen</span>(<span class="num">3000</span>, () =&gt; {
+  console.<span class="fn">log</span>(<span class="str">'🚀 Server ready!'</span>);
+});</pre>
+        </div>
+      </section>
+ 
+      <!-- ░░ FEATURES ░░ -->
+      <section class="features" id="features">
+        <div class="section-label">— What's inside</div>
+        <h2 class="section-title">Everything you need,<br />nothing you don't.</h2>
+        <div class="feature-grid">
+          <article class="feature-card">
+            <div class="feature-icon">📁</div>
+            <h3>Static File Serving</h3>
+            <p>
+              Express's built-in <code>express.static</code> middleware serves
+              your entire <code>/public</code> folder — CSS, images, JS — with
+              zero configuration.
+            </p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon">🎨</div>
+            <h3>Organised Assets</h3>
+            <p>
+              A clean folder structure keeps CSS in <code>/css</code>, scripts
+              in <code>/js</code>, and images in <code>/images</code> so things
+              never get messy.
+            </p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon">⚡</div>
+            <h3>Fast Routing</h3>
+            <p>
+              Named routes pair with static delivery. Dynamic content and static
+              assets coexist seamlessly in the same Express application.
+            </p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon">🔒</div>
+            <h3>Path Safety</h3>
+            <p>
+              <code>path.join(__dirname, 'public')</code> ensures correct paths
+              across Windows, macOS, and Linux — no more broken deployments.
+            </p>
+          </article>
+        </div>
+      </section>
+ 
+      <!-- ░░ TECH STACK ░░ -->
+      <section class="stack" id="stack">
+        <div class="section-label">— Tech stack</div>
+        <h2 class="section-title">Built on solid ground.</h2>
+        <div class="stack-list">
+          <div class="stack-item" data-index="01">
+            <span class="stack-num">01</span>
+            <div class="stack-info">
+              <strong>Node.js</strong>
+              <span>JavaScript runtime powering the server</span>
+            </div>
+            <div class="stack-bar"><span style="width:95%"></span></div>
+          </div>
+          <div class="stack-item" data-index="02">
+            <span class="stack-num">02</span>
+            <div class="stack-info">
+              <strong>Express.js</strong>
+              <span>Minimal web framework with static middleware</span>
+            </div>
+            <div class="stack-bar"><span style="width:88%"></span></div>
+          </div>
+          <div class="stack-item" data-index="03">
+            <span class="stack-num">03</span>
+            <div class="stack-info">
+              <strong>HTML5 + CSS3</strong>
+              <span>Semantic markup and modern styling</span>
+            </div>
+            <div class="stack-bar"><span style="width:80%"></span></div>
+          </div>
+          <div class="stack-item" data-index="04">
+            <span class="stack-num">04</span>
+            <div class="stack-info">
+              <strong>Vanilla JS</strong>
+              <span>Client-side interactivity, no frameworks</span>
+            </div>
+            <div class="stack-bar"><span style="width:72%"></span></div>
+          </div>
+        </div>
+      </section>
+ 
+      <!-- ░░ CONTACT CTA ░░ -->
+      <section class="contact" id="contact">
+        <h2 class="contact-title">Ready to build?</h2>
+        <p class="contact-sub">
+          Clone the repo, run <code>node server.js</code>, and you're live.
+        </p>
+        <a href="#" class="btn-primary large">Start Now →</a>
+      </section>
+    </main>
+ 
+    <!-- ░░ FOOTER ░░ -->
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <span class="logo-text">DevShelf</span>
+        <span class="footer-copy">© 2025 · Project Exercise 36 · Express Static Files</span>
+        <div class="footer-links">
+          <a href="#features">Features</a>
+          <a href="#stack">Stack</a>
+        </div>
+      </div>
+    </footer>
+ 
+    <!-- Static JS served by express.static from /public/js/ -->
+    <script src="/js/main.js"></script>
+</body>
+</html>
