@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User List</title>
+</head>
+<body>
+    <h1>User Profiles</h1>
+    <a href="/add">Add New User</a>
+    <ul>
+        <% users.forEach(user => { %>
+            <li>
+                <strong>Name:</strong> <%= user.name %><br>
+                <strong>Age:</strong> <%= user.age %><br>
+            </li>
+        <% }) %>
+    </ul>
+</body>
+</html>
