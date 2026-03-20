@@ -1,0 +1,15 @@
+{
+  "name": "project-exercise-38",
+  "version": "1.0.0",
+  "description": "- **Topic Covered:** `Middleware` in Express.js\r - **Description:** Create an Express.js application that uses middleware to log request details (`URL`, `HTTP` `method`, and `timestamp`) for every request. Implement custom error-handling middleware to return a user-friendly message for invalid routes or errors.\r - **Skills Covered:**\r     - `Application-level` middleware\r     - Request `logging` and `debugging`\r     - Error handling in `Express.js`.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
