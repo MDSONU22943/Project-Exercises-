@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Upload Lab — Project 39</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0f;
+      --surface: #111118;
+      --surface2: #1a1a25;
+      --border: #2a2a3a;
+      --accent: #7c6af7;
+      --accent2: #f7836a;
+      --accent3: #53e8c0;
+      --text: #e8e8f0;
+      --muted: #6b6b80;
+      --success: #53e8c0;
+      --error: #f7836a;
+      --warning: #f7d06a;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      min-height: 100vh;
+      padding: 2rem;
+      background-image:
+        radial-gradient(ellipse 60% 40% at 10% 0%, rgba(124,106,247,0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 30% at 90% 100%, rgba(83,232,192,0.08) 0%, transparent 60%);
+    }
+
+    /* ─── Header ────────────────────────────────────────── */
+    header {
+      max-width: 900px;
+      margin: 0 auto 3rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .header-tag {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .header-tag::before {
+      content: '';
+      width: 20px;
+      height: 1px;
+      background: var(--accent);
+    }
+    h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+    h1 span { color: var(--accent); }
+    .subtitle {
+      color: var(--muted);
+      font-size: 0.82rem;
+      margin-top: 0.75rem;
+    }
+
+    /* ─── Layout ─────────────────────────────────────────── */
+    .layout {
+      max-width: 900px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    .full-width { grid-column: 1 / -1; }
+
+    /* ─── Cards ──────────────────────────────────────────── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .card:hover { border-color: rgba(124,106,247,0.4); }
+    .card-badge {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      font-weight: 500;
+    }
+    .badge-disk  { background: rgba(124,106,247,0.15); color: var(--accent); }
+    .badge-mem   { background: rgba(83,232,192,0.12);  color: var(--accent3); }
+    .badge-multi { background: rgba(247,131,106,0.12); color: var(--accent2); }
+
+    .card-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .card-desc {
+      color: var(--muted);
+      font-size: 0.75rem;
+      margin-bottom: 1.25rem;
+      line-height: 1.6;
+    }
+
+    /* ─── Drop Zone ──────────────────────────────────────── */
+    .drop-zone {
+      border: 1.5px dashed var(--border);
+      border-radius: 8px;
+      padding: 1.5rem 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: var(--surface2);
+      position: relative;
+    }
+    .drop-zone:hover, .drop-zone.drag-over {
+      border-color: var(--accent);
+      background: rgba(124,106,247,0.06);
+    }
+    .drop-zone input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+    .drop-icon { font-size: 1.8rem; margin-bottom: 0.5rem; display: block; }
+    .drop-label { font-size: 0.75rem; color: var(--muted); }
+    .drop-label strong { color: var(--text); }
+    .drop-formats {
+      font-size: 0.65rem;
+      color: var(--muted);
+      margin-top: 0.3rem;
+      opacity: 0.7;
+    }
+
+    /* ─── Preview ────────────────────────────────────────── */
+    .preview-container {
+      display: none;
+      align-items: center;
+      gap: 0.75rem;
+      margin-top: 0.75rem;
+      padding: 0.75rem;
+      background: var(--surface2);
+      border-radius: 6px;
+      border: 1px solid var(--border);
+    }
+    .preview-container.show { display: flex; }
+    .preview-thumb {
+      width: 48px;
+      height: 48px;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .preview-info { flex: 1; min-width: 0; }
+    .preview-name {
+      font-size: 0.75rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: var(--text);
+    }
+    .preview-size { font-size: 0.65rem; color: var(--muted); margin-top: 0.2rem; }
+
+    /* ─── Button ─────────────────────────────────────────── */
+    .btn {
+      width: 100%;
+      margin-top: 1rem;
+      padding: 0.7rem 1rem;
+      border: none;
+      border-radius: 7px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.78rem;
+      font-weight: 500;
+      cursor: pointer;
+      letter-spacing: 0.04em;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover:not(:disabled) { background: #9585ff; transform: translateY(-1px); }
+    .btn-green   { background: var(--accent3); color: #0a0a0f; }
+    .btn-green:hover:not(:disabled)   { background: #7df5d8; transform: translateY(-1px); }
+    .btn-orange  { background: var(--accent2); color: #0a0a0f; }
+    .btn-orange:hover:not(:disabled)  { background: #ffaa93; transform: translateY(-1px); }
+    .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .btn.loading::after {
+      content: '';
+      width: 12px;
+      height: 12px;
+      border: 2px solid currentColor;
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ─── Response Panel ─────────────────────────────────── */
+    .response-panel {
+      margin-top: 1rem;
+      padding: 0.9rem;
+      border-radius: 7px;
+      font-size: 0.72rem;
+      line-height: 1.7;
+      display: none;
+      border: 1px solid;
+      animation: fadeIn 0.2s ease;
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+    .response-panel.show { display: block; }
+    .response-panel.success { background: rgba(83,232,192,0.06); border-color: rgba(83,232,192,0.25); }
+    .response-panel.error   { background: rgba(247,131,106,0.06); border-color: rgba(247,131,106,0.3); }
+    .response-panel .status-line {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.82rem;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .response-panel.success .status-line { color: var(--success); }
+    .response-panel.error   .status-line { color: var(--error); }
+    .kv-row {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      gap: 0.2rem 0.5rem;
+      padding: 0.15rem 0;
+    }
+    .kv-key { color: var(--muted); }
+    .kv-val { color: var(--text); word-break: break-all; }
+
+    /* ─── Gallery ────────────────────────────────────────── */
+    #gallery-section { animation: fadeIn 0.3s ease; }
+    .gallery-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+    .gallery-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .gallery-count {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      padding: 0.15rem 0.6rem;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+    .btn-refresh {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-refresh:hover { border-color: var(--accent); color: var(--accent); }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 0.75rem;
+    }
+    .gallery-item {
+      position: relative;
+      aspect-ratio: 1;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--surface2);
+      group: true;
+      cursor: pointer;
+      transition: border-color 0.15s, transform 0.15s;
+    }
+    .gallery-item:hover { border-color: var(--accent); transform: scale(1.03); }
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .gallery-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(10,10,15,0.85);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.15s;
+      gap: 0.5rem;
+      padding: 0.5rem;
+      text-align: center;
+    }
+    .gallery-item:hover .gallery-overlay { opacity: 1; }
+    .gallery-fname {
+      font-size: 0.6rem;
+      color: var(--muted);
+      word-break: break-all;
+      line-height: 1.4;
+    }
+    .btn-delete {
+      background: rgba(247,131,106,0.15);
+      border: 1px solid rgba(247,131,106,0.4);
+      color: var(--accent2);
+      padding: 0.25rem 0.6rem;
+      border-radius: 4px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-delete:hover { background: rgba(247,131,106,0.25); }
+    .gallery-empty {
+      text-align: center;
+      padding: 2rem;
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
+
+    /* ─── Concepts ───────────────────────────────────────── */
+    .concepts { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1rem; }
+    .concept-chip {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 0.35rem 0.8rem;
+      font-size: 0.7rem;
+      color: var(--muted);
+      transition: all 0.15s;
+    }
+    .concept-chip:hover { border-color: var(--accent); color: var(--text); }
+    .concept-chip .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    @media (max-width: 640px) {
+      .layout { grid-template-columns: 1fr; }
+      body { padding: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-tag">Project 39 · Express.js + Multer</div>
+    <h1>UPLOAD <span>LAB</span></h1>
+    <p class="subtitle">// File upload system — disk storage · memory storage · multi-file · validation</p>
+  </header>
+
+  <div class="layout">
+
+    <!-- ─── DISK UPLOAD ──────────────────────────────── -->
+    <div class="card">
+      <span class="card-badge badge-disk">DISK</span>
+      <div class="card-title">💾 Disk Storage</div>
+      <div class="card-desc">Saves the file permanently to <code>./uploads/</code> with a UUID filename. File persists after the process ends.</div>
+
+      <div class="drop-zone" id="drop-disk" ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event,'disk')">
+        <input type="file" id="file-disk" accept="image/*" onchange="previewFile('disk')" />
+        <span class="drop-icon">🖼️</span>
+        <div class="drop-label"><strong>Drop image here</strong> or click to browse</div>
+        <div class="drop-formats">JPEG · PNG · GIF · WebP · Max 5MB</div>
+      </div>
+
+      <div class="preview-container" id="preview-disk">
+        <img class="preview-thumb" id="thumb-disk" />
+        <div class="preview-info">
+          <div class="preview-name" id="pname-disk"></div>
+          <div class="preview-size" id="psize-disk"></div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary" id="btn-disk" onclick="uploadFile('disk')">⬆ Upload to Disk</button>
+      <div class="response-panel" id="resp-disk"></div>
+    </div>
+
+    <!-- ─── MEMORY UPLOAD ────────────────────────────── -->
+    <div class="card">
+      <span class="card-badge badge-mem">MEMORY</span>
+      <div class="card-title">⚡ Memory Storage</div>
+      <div class="card-desc">Holds file as a <code>Buffer</code> in RAM. Not saved to disk — great for processing before forwarding to a cloud service.</div>
+
+      <div class="drop-zone" id="drop-memory" ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event,'memory')">
+        <input type="file" id="file-memory" accept="image/*" onchange="previewFile('memory')" />
+        <span class="drop-icon">🧠</span>
+        <div class="drop-label"><strong>Drop image here</strong> or click to browse</div>
+        <div class="drop-formats">JPEG · PNG · GIF · WebP · Max 5MB</div>
+      </div>
+
+      <div class="preview-container" id="preview-memory">
+        <img class="preview-thumb" id="thumb-memory" />
+        <div class="preview-info">
+          <div class="preview-name" id="pname-memory"></div>
+          <div class="preview-size" id="psize-memory"></div>
+        </div>
+      </div>
+
+      <button class="btn btn-green" id="btn-memory" onclick="uploadFile('memory')">⬆ Upload to Memory</button>
+      <div class="response-panel" id="resp-memory"></div>
+    </div>
+
+    <!-- ─── MULTI UPLOAD ─────────────────────────────── -->
+    <div class="card full-width">
+      <span class="card-badge badge-multi">MULTIPLE</span>
+      <div class="card-title">📦 Multiple Files Upload</div>
+      <div class="card-desc">Upload up to 5 images at once to disk. Uses <code>multer.array('photos', 5)</code>.</div>
+
+      <div class="drop-zone" id="drop-multiple" ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event,'multiple')">
+        <input type="file" id="file-multiple" accept="image/*" multiple onchange="previewMultiple()" />
+        <span class="drop-icon">📁</span>
+        <div class="drop-label"><strong>Drop multiple images</strong> or click to browse</div>
+        <div class="drop-formats">Up to 5 images · Max 5MB each</div>
+      </div>
+      <div id="multi-preview-strip" style="display:none; margin-top:0.75rem; display:none; gap:0.5rem; flex-wrap:wrap;"></div>
+
+      <button class="btn btn-orange" id="btn-multiple" onclick="uploadMultiple()">⬆ Upload Multiple</button>
+      <div class="response-panel" id="resp-multiple"></div>
+    </div>
+
+    <!-- ─── GALLERY ──────────────────────────────────── -->
+    <div class="card full-width" id="gallery-section">
+      <div class="gallery-header">
+        <div class="gallery-title">🗂️ Uploaded Files <span class="gallery-count" id="gcount">0</span></div>
+        <button class="btn-refresh" onclick="loadGallery()">↻ Refresh</button>
+      </div>
+      <div id="gallery" class="gallery-grid">
+        <div class="gallery-empty">No files uploaded yet.</div>
+      </div>
+    </div>
+
+    <!-- ─── CONCEPTS ─────────────────────────────────── -->
+    <div class="card full-width" style="background:transparent; border-style:dashed;">
+      <div style="font-family:'Syne',sans-serif; font-size:0.78rem; font-weight:700; color:var(--muted); margin-bottom:0.75rem; letter-spacing:0.06em; text-transform:uppercase;">Skills Covered</div>
+      <div class="concepts">
+        <div class="concept-chip"><span class="dot"></span>multer.diskStorage()</div>
+        <div class="concept-chip"><span class="dot" style="background:var(--accent3)"></span>multer.memoryStorage()</div>
+        <div class="concept-chip"><span class="dot" style="background:var(--accent2)"></span>File type validation (fileFilter)</div>
+        <div class="concept-chip"><span class="dot"></span>Size limits (limits.fileSize)</div>
+        <div class="concept-chip"><span class="dot" style="background:var(--accent3)"></span>UUID rename on disk</div>
+        <div class="concept-chip"><span class="dot" style="background:var(--accent2)"></span>multer.array() multi-upload</div>
+        <div class="concept-chip"><span class="dot"></span>MulterError handling</div>
+        <div class="concept-chip"><span class="dot" style="background:var(--accent3)"></span>Buffer → base64 preview</div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // ─── Preview helpers ────────────────────────────────────────────────────
+    function formatBytes(b) {
+      if (b < 1024) return b + ' B';
+      if (b < 1024*1024) return (b/1024).toFixed(1) + ' KB';
+      return (b/(1024*1024)).toFixed(2) + ' MB';
+    }
+
+    function previewFile(mode) {
+      const input = document.getElementById(`file-${mode}`);
+      const file = input.files[0];
+      if (!file) return;
+
+      const thumb = document.getElementById(`thumb-${mode}`);
+      const name  = document.getElementById(`pname-${mode}`);
+      const size  = document.getElementById(`psize-${mode}`);
+      const prev  = document.getElementById(`preview-${mode}`);
+
+      thumb.src = URL.createObjectURL(file);
+      name.textContent = file.name;
+      size.textContent = formatBytes(file.size);
+      prev.classList.add('show');
+    }
+
+    function previewMultiple() {
+      const input = document.getElementById('file-multiple');
+      const strip = document.getElementById('multi-preview-strip');
+      strip.innerHTML = '';
+      strip.style.display = 'flex';
+
+      Array.from(input.files).slice(0, 5).forEach(file => {
+        const img = document.createElement('img');
+        img.src = URL.createObjectURL(file);
+        img.style.cssText = 'width:56px;height:56px;object-fit:cover;border-radius:6px;border:1px solid var(--border)';
+        strip.appendChild(img);
+      });
+    }
+
+    // ─── Drag & Drop ────────────────────────────────────────────────────────
+    function onDragOver(e) {
+      e.preventDefault();
+      e.currentTarget.classList.add('drag-over');
+    }
+    function onDragLeave(e) {
+      e.currentTarget.classList.remove('drag-over');
+    }
+    function onDrop(e, mode) {
+      e.preventDefault();
+      e.currentTarget.classList.remove('drag-over');
+      const input = document.getElementById(`file-${mode}`);
+      const dt = new DataTransfer();
+      Array.from(e.dataTransfer.files).forEach(f => dt.items.add(f));
+      input.files = dt.files;
+      if (mode === 'multiple') previewMultiple();
+      else previewFile(mode);
+    }
+
+    // ─── Show Response ───────────────────────────────────────────────────────
+    function showResponse(id, data) {
+      const el = document.getElementById(`resp-${id}`);
+      el.classList.add('show');
+      el.className = `response-panel show ${data.success ? 'success' : 'error'}`;
+
+      const icon = data.success ? '✓' : '✗';
+      let html = `<div class="status-line">${icon} ${data.message}</div>`;
+
+      const info = data.file || {};
+      const fields = {
+        storage: data.storage,
+        originalName: info.originalName,
+        savedAs: info.savedAs,
+        mimeType: info.mimeType,
+        size: info.size,
+        bufferLength: info.bufferLength ? `${info.bufferLength} bytes` : undefined,
+        path: info.path,
+        uploadedAt: info.uploadedAt ? new Date(info.uploadedAt).toLocaleTimeString() : undefined,
+      };
+
+      for (const [k, v] of Object.entries(fields)) {
+        if (v !== undefined) {
+          html += `<div class="kv-row"><span class="kv-key">${k}</span><span class="kv-val">${v}</span></div>`;
+        }
+      }
+
+      // Multiple files
+      if (data.files) {
+        data.files.forEach((f, i) => {
+          html += `<div class="kv-row"><span class="kv-key">file[${i}]</span><span class="kv-val">${f.originalName} → ${f.savedAs} (${f.size})</span></div>`;
+        });
+      }
+
+      if (data.error) {
+        html += `<div class="kv-row"><span class="kv-key">code</span><span class="kv-val">${data.code || ''}</span></div>`;
+      }
+
+      el.innerHTML = html;
+      if (data.success) loadGallery();
+    }
+
+    function setLoading(btnId, loading) {
+      const btn = document.getElementById(btnId);
+      btn.disabled = loading;
+      if (loading) btn.classList.add('loading');
+      else btn.classList.remove('loading');
+    }
+
+    // ─── Upload Single ───────────────────────────────────────────────────────
+    async function uploadFile(mode) {
+      const input = document.getElementById(`file-${mode}`);
+      if (!input.files[0]) return alert('Please select a file first.');
+
+      const fd = new FormData();
+      fd.append('profilePicture', input.files[0]);
+
+      setLoading(`btn-${mode}`, true);
+      try {
+        const res = await fetch(`/upload/${mode}`, { method: 'POST', body: fd });
+        const data = await res.json();
+        showResponse(mode, data);
+      } catch (e) {
+        showResponse(mode, { success: false, message: e.message });
+      } finally {
+        setLoading(`btn-${mode}`, false);
+      }
+    }
+
+    // ─── Upload Multiple ────────────────────────────────────────────────────
+    async function uploadMultiple() {
+      const input = document.getElementById('file-multiple');
+      if (!input.files.length) return alert('Please select files first.');
+
+      const fd = new FormData();
+      Array.from(input.files).forEach(f => fd.append('photos', f));
+
+      setLoading('btn-multiple', true);
+      try {
+        const res = await fetch('/upload/multiple', { method: 'POST', body: fd });
+        const data = await res.json();
+        showResponse('multiple', data);
+      } catch (e) {
+        showResponse('multiple', { success: false, message: e.message });
+      } finally {
+        setLoading('btn-multiple', false);
+      }
+    }
+
+    // ─── Gallery ─────────────────────────────────────────────────────────────
+    async function loadGallery() {
+      const res   = await fetch('/upload/list');
+      const data  = await res.json();
+      const grid  = document.getElementById('gallery');
+      const count = document.getElementById('gcount');
+      count.textContent = data.count;
+
+      if (!data.files.length) {
+        grid.innerHTML = '<div class="gallery-empty">No files uploaded yet.</div>';
+        return;
+      }
+
+      grid.innerHTML = data.files.map(f => `
+        <div class="gallery-item">
+          <img src="${f.url}" alt="${f.filename}" loading="lazy" />
+          <div class="gallery-overlay">
+            <div class="gallery-fname">${f.filename}</div>
+            <div class="gallery-fname" style="color:var(--accent3)">${f.size}</div>
+            <button class="btn-delete" onclick="deleteFile('${f.filename}', event)">✕ Delete</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function deleteFile(filename, e) {
+      e.stopPropagation();
+      if (!confirm(`Delete "${filename}"?`)) return;
+      await fetch(`/upload/${filename}`, { method: 'DELETE' });
+      loadGallery();
+    }
+
+    // Load gallery on start
+    loadGallery();
+  </script>
+</body>
+</html>
