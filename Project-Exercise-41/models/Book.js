@@ -19,4 +19,12 @@ const bookSchema = new mongoose.Schema({
     timestamps:true
 })
 
+// ✅ Single field indexes
+bookSchema.index({ genre: 1 });
+bookSchema.index({ author: 1 });
+
+// ✅ Compound index
+bookSchema.index({ genre: 1, author: 1 });
+
+
 module.exports = mongoose.model("Book", bookSchema)

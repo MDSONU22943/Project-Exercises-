@@ -22,6 +22,21 @@ router.get("/", async (req,res)=>{
     }
 })
 
+router.get("/search", async (req, res) => {
+    try {
+        const { genre, author } = req.query
+
+        let filter = {}
+
+        if (genre) filter.genre = genre
+        if (author) filter.author = author
+
+        const books = await Book.find(filter)
+        res.status(200).json(books)
+    } catch (error) {
+        res.status(500).json({ message: "Search failed", error: error.message })
+    }
+})
 router.get("/:id", async (req,res)=>{
     try{
         const book = await Book.findById(req.params.id)
@@ -49,5 +64,25 @@ router.delete("/:id", async (req,res)=>{
         res.status(500).json({message:"Failed to delete book", error: error.message})
     }
 })
+
+
+router.get("/search/genre/:genre", async (req, res) => {
+    try {
+        const books = await Book.find({ genre: req.params.genre })
+        res.status(200).json(books)
+    } catch (error) {
+        res.status(500).json({ message: "Search failed", error: error.message })
+    }
+})
+
+router.get("/search/author/:author", async (req, res) => {
+    try {
+        const books = await Book.find({ author: req.params.author })
+        res.status(200).json(books)
+    } catch (error) {
+        res.status(500).json({ message: "Search failed", error: error.message })
+    }
+})
+
 
 module.exports = router
