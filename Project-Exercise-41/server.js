@@ -5,6 +5,7 @@ const bookRoutes = require("./routes/bookRoutes")
 const authRoutes = require("./routes/authRoutes")
 const cors = require("cors")
 const cookieParser = require("cookie-parser");
+const {connectRedis} = require("./config/redis")
 
 const app = express()
 
@@ -13,6 +14,7 @@ app.use(cors())
 app.use(cookieParser());
 
 connectDB()
+connectRedis()
 
 app.use("/api/auth", authRoutes)
 app.use("/books", bookRoutes)
