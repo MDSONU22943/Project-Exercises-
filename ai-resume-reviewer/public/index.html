@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Resume Reviewer</title>
+</head>
+<body>
+    <h2>Upload your Resume</h2>
+    <input type="file" id="fileInput">
+    <button onclick="upload()">Submit</button>
+    <pre id="result"></pre>
+
+    <script>
+        async function upload(){
+            const file = document.getElementById('fileInput').files[0];
+            const formData = new FormData();
+            formData.append("resume", file);
+
+            const res = await fetch("http://localhost:3000/upload", {
+                method: "POST",
+                body: formData
+            });
+
+            const data = await res.json();
+            document.getElementById('result').textContent = data.feedback;
+        }
+    </script>
+</body>
+</html>
